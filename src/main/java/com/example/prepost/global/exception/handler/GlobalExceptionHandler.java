@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(
                 ErrorResponse.builder()
                         .status(errorCode.getStatus().value())
-                        .error(errorCode.getStatus().getReasonPhrase())
                         .code(errorCode.name())
                         .message(message)
                         .build()
@@ -45,12 +44,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(
                 ErrorResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
-                        .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                         .code(ErrorCode.VALIDATION_ERROR.name())
                         .message(message)
                         .fieldErrors(errors)
                         .build()
         );
     }
-    //TODO: handle other exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e, Locale locale){
+        String message = messageSource.getMessage(ErrorCode.INTERNAL_SERVER_ERROR.getMessageKey(), null, locale);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ErrorResponse.builder()
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .code(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                        .message(message)
+                        .build()
+
+        );
+    }
 }

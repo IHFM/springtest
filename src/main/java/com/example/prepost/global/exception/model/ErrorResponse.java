@@ -3,7 +3,6 @@ package com.example.prepost.global.exception.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ErrorResponse {
     private int status;
-    private String error;
     private String code;
     private String message;
 
