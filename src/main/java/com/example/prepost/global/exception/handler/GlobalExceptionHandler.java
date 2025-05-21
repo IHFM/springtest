@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.validation.BindException;
 import org.springframework.context.MessageSource;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Locale;
 
+@Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
@@ -23,6 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> globalExceptionHandling(GlobalException e, Locale locale){
         ErrorCode errorCode = e.getErrorCode();
         String message = messageSource.getMessage(errorCode.getMessageKey(), null, locale);
+        log.warn("GlobalException 발생: code={}, message={}", errorCode.name(), message, e);
         return ResponseEntity.status(errorCode.getStatus()).body(
                 ErrorResponse.builder()
                         .status(errorCode.getStatus().value())
@@ -41,6 +44,7 @@ public class GlobalExceptionHandler {
                         .build())
                 .toList();
         String message = messageSource.getMessage(ErrorCode.VALIDATION_ERROR.getMessageKey(), null, locale);
+        log.warn("BindException 발생: {}", message, e);
         return ResponseEntity.badRequest().body(
                 ErrorResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
@@ -53,6 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e, Locale locale){
         String message = messageSource.getMessage(ErrorCode.INTERNAL_SERVER_ERROR.getMessageKey(), null, locale);
+        log.error("Unexpected 예외 발생", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ErrorResponse.builder()
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
