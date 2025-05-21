@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> globalExceptionHandling(GlobalException e, Locale locale){
         ErrorCode errorCode = e.getErrorCode();
         String message = messageSource.getMessage(errorCode.getMessageKey(), null, locale);
-        log.warn("GlobalException 발생: code={}, message={}", errorCode.name(), message, e);
         return ResponseEntity.status(errorCode.getStatus()).body(
                 ErrorResponse.builder()
                         .status(errorCode.getStatus().value())
@@ -40,11 +39,10 @@ public class GlobalExceptionHandler {
         List<ErrorResponse.FieldValidationError> errors = e.getFieldErrors().stream()
                 .map(fieldError -> ErrorResponse.FieldValidationError.builder()
                         .field(fieldError.getField())
-                        .message(fieldError.getDefaultMessage())
+                        .message(messageSource.getMessage(fieldError, locale))
                         .build())
                 .toList();
         String message = messageSource.getMessage(ErrorCode.VALIDATION_ERROR.getMessageKey(), null, locale);
-        log.warn("BindException 발생: {}", message, e);
         return ResponseEntity.badRequest().body(
                 ErrorResponse.builder()
                         .status(HttpStatus.BAD_REQUEST.value())
