@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에러 펑"),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "error.internal_server"),
 
     //게시물
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "Post Not Found");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "error.post_not_found"),
+
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "error.validation");
 
     private final HttpStatus status;
-    private final String message;
+    private final String messageKey;
 }
