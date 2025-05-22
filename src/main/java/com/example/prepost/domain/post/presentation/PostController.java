@@ -22,8 +22,8 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPost(@RequestBody @Valid PostRequestDto dto){
-        createPostService.createPost(dto);
+    public Long createPost(@RequestBody @Valid PostRequestDto dto){
+        return createPostService.createPost(dto);
     }
 
     @GetMapping("/{post-id}")

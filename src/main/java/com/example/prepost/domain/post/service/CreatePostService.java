@@ -13,8 +13,9 @@ public class CreatePostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public void createPost(PostRequestDto dto){
+    public Long createPost(PostRequestDto dto){
         Post post = Post.create(dto.getTitle(), dto.getContent(), dto.getAuthor());
         postRepository.save(post);
+        return post.getId();
     }
 }
