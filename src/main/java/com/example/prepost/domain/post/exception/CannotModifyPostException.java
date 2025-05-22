@@ -6,6 +6,6 @@ import com.example.prepost.global.exception.model.GlobalException;
 public class CannotModifyPostException extends GlobalException {
     public static final GlobalException EXCEPTION = new CannotModifyPostException();
     public CannotModifyPostException() {
-        super(ErrorCode.VALIDATION_ERROR);
+        super(ErrorCode.CANNOT_MODIFY_POST);
     }
 }
