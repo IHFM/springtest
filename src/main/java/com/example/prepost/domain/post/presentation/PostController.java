@@ -5,10 +5,13 @@ import com.example.prepost.domain.post.presentation.dto.response.PostResponseDto
 import com.example.prepost.domain.post.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/post")
@@ -32,8 +35,9 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostResponseDto> getPostList(){
-        return queryPostListService.getPostList();
+    public Page<PostResponseDto> getPostList(
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
+        return queryPostListService.getPostList(pageable);
     }
 
     @PatchMapping("/{post-id}")
