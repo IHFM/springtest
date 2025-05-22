@@ -11,6 +11,8 @@ public enum ErrorCode {
 
     //게시물
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "error.post_not_found"),
+    CANNOT_MODIFY_POST(HttpStatus.FORBIDDEN, "error.cannot_modify_post"),
+    CANNOT_DELETE_POST(HttpStatus.FORBIDDEN, "error.cannot_delete_post"),
 
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "error.validation");
 
