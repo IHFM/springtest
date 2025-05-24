@@ -1,28 +1,56 @@
 package com.example.prepost.global.exception.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
+
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
 @Builder
-@AllArgsConstructor
-public class ErrorResponse {
-    private int status;
-    private String code;
-    private String message;
+public record ErrorResponse(
+        int status,
+        String code,
+        String message,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        LocalDateTime timestamp,
+        String exception,
+        List<FieldValidationError> fieldErrors
+) {
+    public record FieldValidationError(String field, String message) {}
 
-    //유효성 검사 에러
-    @Builder.Default //null값 방지
-    private List<FieldValidationError> fieldErrors = List.of(); //필드 초기화
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class FieldValidationError{
-        private String field;
-        private String message;
+    public static ErrorResponse of(ErrorCode errorCode, String message, Exception e) {
+        return ErrorResponse.builder()
+                .status(errorCode.getStatus().value())
+                .code(errorCode.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(List.of())
+                .build();
     }
+
+    public static ErrorResponse of(ErrorCode errorCode, String message, Exception e, List<FieldValidationError> errors){
+        return ErrorResponse.builder()
+                .status(errorCode.getStatus().value())
+                .code(errorCode.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(errors)
+                .build();
+    }
+
+    public static ErrorResponse of(HttpStatus status, String message, Exception e){
+        return ErrorResponse.builder()
+                .status(status.value())
+                .code(status.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(List.of())
+                .build();
+    }
+
 }
