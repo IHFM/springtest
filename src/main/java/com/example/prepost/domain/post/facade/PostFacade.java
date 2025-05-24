@@ -1,4 +1,4 @@
-package com.example.prepost.domain.post.fasade;
+package com.example.prepost.domain.post.facade;
 
 import com.example.prepost.domain.post.domain.Post;
 import com.example.prepost.domain.post.domain.repository.PostRepository;
