@@ -1,12 +1,9 @@
 package com.example.prepost.domain.post.service;
 
 import com.example.prepost.domain.post.domain.Post;
-import com.example.prepost.domain.post.domain.repository.PostRepository;
 import com.example.prepost.domain.post.exception.CannotModifyPostException;
-import com.example.prepost.domain.post.exception.PostNotFoundException;
-import com.example.prepost.domain.post.fasade.PostFacade;
+import com.example.prepost.domain.post.facade.PostFacade;
 import com.example.prepost.domain.post.presentation.dto.request.PostRequestDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
