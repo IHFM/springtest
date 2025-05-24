@@ -4,6 +4,7 @@ import com.example.prepost.domain.post.domain.Post;
 import com.example.prepost.domain.post.domain.repository.PostRepository;
 import com.example.prepost.domain.post.exception.CannotModifyPostException;
 import com.example.prepost.domain.post.exception.PostNotFoundException;
+import com.example.prepost.domain.post.fasade.PostFacade;
 import com.example.prepost.domain.post.presentation.dto.request.PostRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UpdatePostService {
-    private final PostRepository postRepository;
+    private final PostFacade postFacade;
 
     @Transactional
     public void updatePost(PostRequestDto dto, Long postId){
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> PostNotFoundException.EXCEPTION);
+        Post post = postFacade.findByPost(postId);
         if(!post.getAuthor().equals(dto.getAuthor())){
             throw CannotModifyPostException.EXCEPTION;
         }
