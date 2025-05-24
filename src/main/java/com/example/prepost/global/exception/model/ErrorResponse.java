@@ -1,12 +1,14 @@
 package com.example.prepost.global.exception.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 public record ErrorResponse(
         int status,
         String code,
@@ -19,36 +21,36 @@ public record ErrorResponse(
     public record FieldValidationError(String field, String message) {}
 
     public static ErrorResponse of(ErrorCode errorCode, String message, Exception e) {
-        return new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.name(),
-                message,
-                LocalDateTime.now(),
-                e.getClass().getSimpleName(),
-                List.of()
-        );
+        return ErrorResponse.builder()
+                .status(errorCode.getStatus().value())
+                .code(errorCode.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(List.of())
+                .build();
     }
 
     public static ErrorResponse of(ErrorCode errorCode, String message, Exception e, List<FieldValidationError> errors){
-        return new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.name(),
-                message,
-                LocalDateTime.now(),
-                e.getClass().getSimpleName(),
-                errors
-        );
+        return ErrorResponse.builder()
+                .status(errorCode.getStatus().value())
+                .code(errorCode.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(errors)
+                .build();
     }
 
     public static ErrorResponse of(HttpStatus status, String message, Exception e){
-        return new ErrorResponse(
-                status.value(),
-                status.name(),
-                message,
-                LocalDateTime.now(),
-                e.getClass().getSimpleName(),
-                List.of()
-        );
+        return ErrorResponse.builder()
+                .status(status.value())
+                .code(status.name())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .exception(e.getClass().getSimpleName())
+                .fieldErrors(List.of())
+                .build();
     }
 
 }
